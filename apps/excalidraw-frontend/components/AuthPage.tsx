@@ -14,7 +14,10 @@ export default function AuthPage({isSignin}:{isSignin: boolean}){
                 
                 </div>
                 <div className="flex justify-center " >
-                    <button className="pt-2 justify-center items-center cursor-pointer bg-slate-400 rounded w-18">{isSignin?"Sign in":"Sign up"}</button>
+                    <button className="pt-2 justify-center items-center cursor-pointer bg-slate-400 rounded w-18"
+                    onClick={()=>{
+                        
+                    }}>{isSignin?"Sign in":"Sign up"}</button>
                 </div>
 
             </div>

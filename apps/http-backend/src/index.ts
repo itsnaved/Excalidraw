@@ -1,12 +1,14 @@
 import express from "express";
-import jwt from "jsonWebToken";
+import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config"
 import { middleware } from "./middleware";
 import {CreateUserSchema, SigninSchema, CreateRoomSchema} from "@repo/common/types";
 import {prismaClient} from "@repo/db/client"
+import cors from 'cors';
 
 const app= express();
 app.use(express.json())
+app.use(cors());
 
 app.post("/signup", async(req, res)=>{
     const parsedData= CreateUserSchema.safeParse(req.body);
@@ -56,12 +58,16 @@ app.post("/signin", async(req, res)=>{
     const token= jwt.sign({
                 userId: user?.id
             },JWT_SECRET)
+            console.log("JWT_SECRET:", JWT_SECRET);
                 res.json({token});
 });
 
 app.post("/room", middleware, async(req, res)=>{
 
     const parsedData= CreateRoomSchema.safeParse(req.body);
+    console.log("room route");
+    console.log(parsedData);
+
     if(!parsedData.success){
         res.json({msg:"Incorrect inputs"});
         return;
@@ -87,7 +93,11 @@ app.post("/room", middleware, async(req, res)=>{
 app.get("/chats/:roomId", async(req, res)=>{
     try {
         const roomId= Number(req.params.roomId);
-        console.log(req.params.roomId)
+            if (isNaN(roomId)) {
+                return res.status(400).json({ msg: "Invalid roomId" });
+            }
+
+        console.log(roomId);
          const messages= await prismaClient.chat.findMany({
         where:{
             roomId: roomId
@@ -95,7 +105,7 @@ app.get("/chats/:roomId", async(req, res)=>{
         orderBy:{
             id:"desc"
         },
-        take: 50
+        take: 1000
     });
     res.json({
         messages
