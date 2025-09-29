@@ -9,12 +9,21 @@ export function Canvas({roomId, socket}:{
     useEffect(()=>{
 
             if(canvasRef.current){  
-                initDraw(canvasRef.current, roomId, socket);
+                 initDraw(canvasRef.current, roomId, socket);
             }
         
     },[canvasRef]);
 
-     return <div>
-        <canvas ref={canvasRef} width={2000} height={1080}></canvas>
+     return <div style={{
+        height: "100vh",
+        overflow: "hidden"
+     }}>
+        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+
+        <div style={{
+            position: "fixed",
+            top: 10,
+            left: 10
+        }}> Hii There</div>
     </div>
 }

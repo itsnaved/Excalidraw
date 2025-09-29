@@ -33,6 +33,3 @@ export function RoomCanvas({roomId}:{roomId: string}){
         <Canvas roomId={roomId} socket={socket}/>
     </div>
 }
-
-
-1;30  
